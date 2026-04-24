@@ -1,3085 +1,554 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gravitoo – Agri-Tech App</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap"
-        rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gravitoo — Smart Agri-Tech Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 
-    <style>
-        :root {
-            --green-primary: #2E7D32;
-            --green-light: #43A047;
-            --green-pale: #C8E6C9;
-            --green-glow: rgba(46, 125, 50, 0.18);
-            --earth: #8D6E63;
-            --tech-blue: #1A73E8;
-            --tech-purple: #7C4DFF;
-            --bg: #F7F5F0;
-            --bg2: #EEEAE2;
-            --surface: #FFFFFF;
-            --text-primary: #1C1C1E;
-            --text-secondary: #5A5A5F;
-            --text-muted: #9B9BA0;
-            --warning: #E53935;
-            --warning-pale: #FFEBEE;
-            --gold: #F9A825;
-            --radius-sm: 10px;
-            --radius-md: 16px;
-            --radius-lg: 24px;
-            --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.07);
-            --shadow-md: 0 6px 28px rgba(0, 0, 0, 0.10);
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --sidebar-w: 220px;
-        }
-
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html,
-        body {
-            height: 100%;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* ====== TOP BAR (desktop) ====== */
-        .top-bar {
-            display: none;
-            background: var(--surface);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-            height: 60px;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            flex-shrink: 0;
-            box-shadow: var(--shadow-sm);
-            z-index: 100;
-        }
-
-        .brand {
-            font-family: 'Sora', sans-serif;
-            font-size: 20px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .brand-green {
-            color: var(--green-primary);
-        }
-
-        .brand-dark {
-            color: var(--text-primary);
-        }
-
-        .top-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .avatar-circle {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--green-primary), #1B5E20);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Sora', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: white;
-        }
-
-        .user-meta .name {
-            font-family: 'Sora', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .user-meta .role {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* ====== LAYOUT ====== */
-        .app-layout {
-            flex: 1;
-            display: flex;
-            overflow: hidden;
-            min-height: 0;
-        }
-
-        /* ====== SIDEBAR (desktop) ====== */
-        .sidebar {
-            display: none;
-            width: var(--sidebar-w);
-            background: var(--surface);
-            border-right: 1px solid rgba(0, 0, 0, 0.07);
-            flex-direction: column;
-            flex-shrink: 0;
-            padding: 16px 10px;
-            overflow-y: auto;
-        }
-
-        .sb-section {
-            font-family: 'Sora', sans-serif;
-            font-size: 9.5px;
-            font-weight: 700;
-            color: var(--text-muted);
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            padding: 10px 12px 4px;
-            margin-top: 6px;
-        }
-
-        .sb-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .sb-item:hover {
-            background: var(--bg);
-            color: var(--text-primary);
-        }
-
-        .sb-item.active {
-            background: #E8F5E9;
-            color: var(--green-primary);
-            font-weight: 700;
-        }
-
-        .sb-ai {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: var(--transition);
-            background: linear-gradient(135deg, var(--green-primary), #1B5E20);
-            color: white;
-            font-size: 13px;
-            font-weight: 700;
-            margin-top: 2px;
-        }
-
-        .sb-ai-icon {
-            width: 26px;
-            height: 26px;
-            background: rgba(255, 255, 255, .18);
-            border-radius: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sb-footer {
-            margin-top: auto;
-            padding-top: 14px;
-            border-top: 1px solid rgba(0, 0, 0, .06);
-        }
-
-        /* ====== MAIN ====== */
-        .main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            min-width: 0;
-        }
-
-        .screens-wrapper {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .screen {
-            position: absolute;
-            inset: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            opacity: 0;
-            transform: translateX(20px);
-            transition: opacity .35s ease, transform .35s ease;
-            pointer-events: none;
-            scrollbar-width: thin;
-            scrollbar-color: var(--bg2) transparent;
-        }
-
-        .screen::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .screen::-webkit-scrollbar-thumb {
-            background: var(--bg2);
-            border-radius: 4px;
-        }
-
-        .screen.active {
-            opacity: 1;
-            transform: translateX(0);
-            pointer-events: all;
-        }
-
-        .screen.exit {
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-
-        /* ====== BOTTOM NAV (mobile) ====== */
-        .bottom-nav {
-            height: 64px;
-            background: var(--surface);
-            border-top: 1px solid rgba(0, 0, 0, .06);
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 0 4px env(safe-area-inset-bottom, 6px);
-            flex-shrink: 0;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, .06);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            cursor: pointer;
-            padding: 6px 12px;
-            border-radius: var(--radius-md);
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .nav-item svg {
-            transition: var(--transition);
-            color: var(--text-muted);
-        }
-
-        .nav-item span {
-            font-size: 10px;
-            font-weight: 500;
-            color: var(--text-muted);
-            transition: var(--transition);
-            letter-spacing: .02em;
-        }
-
-        .nav-item.active span {
-            color: var(--green-primary);
-            font-weight: 600;
-        }
-
-        .nav-item.active svg {
-            color: var(--green-primary);
-        }
-
-        .nav-pill {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 3px;
-            background: var(--green-primary);
-            border-radius: 0 0 4px 4px;
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .nav-item.active .nav-pill {
-            opacity: 1;
-        }
-
-        .nav-ai-btn {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--green-primary), #1B5E20);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 16px var(--green-glow);
-            cursor: pointer;
-            transition: var(--transition);
-            margin-top: -8px;
-            position: relative;
-        }
-
-        .nav-ai-btn::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, var(--green-primary), transparent, var(--green-primary));
-            opacity: 0;
-            transition: var(--transition);
-            animation: spin 3s linear infinite;
-        }
-
-        .nav-ai-btn.active::before {
-            opacity: 1;
-        }
-
-        .nav-ai-btn svg {
-            color: white;
-            position: relative;
-            z-index: 1;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1)
-            }
-
-            50% {
-                opacity: .6;
-                transform: scale(.8)
-            }
-        }
-
-        @keyframes active-pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 0 4px var(--green-glow)
-            }
-
-            50% {
-                box-shadow: 0 0 0 8px rgba(46, 125, 50, .08)
-            }
-        }
-
-        /* =====================
-           HOME SCREEN
-        ===================== */
-        #screen-home {
-            background: var(--bg);
-        }
-
-        .home-header {
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .greeting-sub {
-            font-family: 'Sora', sans-serif;
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--text-muted);
-            letter-spacing: .08em;
-            text-transform: uppercase;
-        }
-
-        .greeting-name {
-            font-family: 'Sora', sans-serif;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-top: 2px;
-        }
-
-        .greeting-name em {
-            color: var(--green-primary);
-            font-style: normal;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .icon-btn {
-            width: 40px;
-            height: 40px;
-            background: var(--surface);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow-sm);
-            cursor: pointer;
-            position: relative;
-            color: var(--text-primary);
-        }
-
-        .notif-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--warning);
-            border-radius: 50%;
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            border: 2px solid var(--surface);
-        }
-
-        .cart-dot {
-            width: 16px;
-            height: 16px;
-            background: var(--green-primary);
-            border-radius: 50%;
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            border: 2px solid var(--surface);
-            font-size: 8px;
-            font-weight: 700;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .weather-strip {
-            margin: 0 20px 18px;
-            background: var(--surface);
-            border-radius: var(--radius-md);
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0, 0, 0, .05);
-        }
-
-        .weather-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .weather-icon {
-            font-size: 28px;
-        }
-
-        .weather-temp {
-            font-family: 'Sora', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .weather-loc {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 1px;
-        }
-
-        .weather-stats {
-            display: flex;
-            gap: 18px;
-        }
-
-        .wstat-val {
-            font-family: 'Sora', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .wstat-lbl {
-            font-size: 10px;
-            color: var(--text-muted);
-        }
-
-        .hero-card {
-            margin: 0 20px 20px;
-            border-radius: var(--radius-lg);
-            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 45%, #388E3C 100%);
-            padding: 24px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-md), 0 0 0 1px rgba(255, 255, 255, .08) inset;
-            cursor: pointer;
-            min-height: 148px;
-        }
-
-        .hero-card::before {
-            content: '';
-            position: absolute;
-            top: -40px;
-            right: -40px;
-            width: 160px;
-            height: 160px;
-            background: radial-gradient(circle, rgba(255, 255, 255, .12) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .hero-card::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            left: -20px;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, rgba(255, 255, 255, .06) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, .18);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            padding: 4px 10px;
-            font-size: 10px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, .9);
-            letter-spacing: .06em;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .hero-dot {
-            width: 6px;
-            height: 6px;
-            background: #69F0AE;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .hero-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 21px;
-            font-weight: 800;
-            color: white;
-            line-height: 1.25;
-            margin-bottom: 6px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-sub {
-            font-size: 13px;
-            color: rgba(255, 255, 255, .72);
-            margin-bottom: 16px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: white;
-            color: var(--green-primary);
-            font-weight: 700;
-            font-size: 12px;
-            padding: 9px 18px;
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-emoji {
-            position: absolute;
-            right: 16px;
-            bottom: 12px;
-            font-size: 56px;
-            opacity: .35;
-            z-index: 0;
-        }
-
-        .section-label {
-            font-family: 'Sora', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-primary);
-            padding: 0 20px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .section-label a {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--green-primary);
-            text-decoration: none;
-        }
-
-        .quick-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            padding: 0 20px;
-            margin-bottom: 22px;
-        }
-
-        .quick-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .quick-icon {
-            width: 62px;
-            height: 62px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-            border: 1px solid rgba(0, 0, 0, .04);
-        }
-
-        .quick-item:active .quick-icon {
-            transform: scale(.94);
-        }
-
-        .quick-label {
-            font-size: 10.5px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            text-align: center;
-            line-height: 1.3;
-        }
-
-        .qi-1 {
-            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
-        }
-
-        .qi-2 {
-            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
-        }
-
-        .qi-3 {
-            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
-        }
-
-        .qi-4 {
-            background: linear-gradient(135deg, #FCE4EC, #F8BBD9);
-        }
-
-        .alert-bar {
-            margin: 0 20px 20px;
-            background: linear-gradient(135deg, #FFF8E1, #FFF3CD);
-            border: 1px solid #FFE082;
-            border-radius: var(--radius-md);
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .alert-bar span {
-            font-size: 12.5px;
-            font-weight: 500;
-            color: #7B5200;
-        }
-
-        .alert-bar strong {
-            color: #E65100;
-        }
-
-        .journey-card {
-            margin: 0 20px 20px;
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: 18px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0, 0, 0, .05);
-        }
-
-        .journey-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-        }
-
-        .journey-crop {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .crop-avatar {
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, #E8F5E9, #A5D6A7);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .crop-name {
-            font-family: 'Sora', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .crop-sub {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 1px;
-        }
-
-        .day-badge {
-            background: var(--green-pale);
-            color: var(--green-primary);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        .progress-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10.5px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        .progress-labels span:last-child {
-            color: var(--green-primary);
-            font-weight: 600;
-        }
-
-        .progress-track {
-            height: 7px;
-            background: var(--bg2);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 14px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 28%;
-            background: linear-gradient(90deg, var(--green-primary), var(--green-light));
-            border-radius: 10px;
-            position: relative;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            right: -2px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 11px;
-            height: 11px;
-            background: var(--green-light);
-            border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 0 6px var(--green-glow);
-        }
-
-        .mini-timeline {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-            padding: 0 4px;
-        }
-
-        .mini-timeline::before {
-            content: '';
-            position: absolute;
-            top: 12px;
-            left: 16px;
-            right: 16px;
-            height: 2px;
-            background: var(--bg2);
-        }
-
-        .tl-node-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .tnode {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-        }
-
-        .tnode-done {
-            background: var(--green-primary);
-        }
-
-        .tnode-active {
-            background: white;
-            border: 2.5px solid var(--green-primary);
-            box-shadow: 0 0 0 4px var(--green-glow);
-            animation: active-pulse 2s infinite;
-        }
-
-        .tnode-todo {
-            background: var(--bg2);
-        }
-
-        .tnode-lbl {
-            font-size: 9px;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
-
-        /* =====================
-           RENTALS SCREEN
-        ===================== */
-        #screen-rentals {
-            background: var(--bg);
-        }
-
-        .rentals-header {
-            padding: 16px 20px;
-            background: var(--bg);
-        }
-
-        .rentals-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 14px;
-        }
-
-        .rentals-title em {
-            color: var(--green-primary);
-            font-style: normal;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--surface);
-            border-radius: var(--radius-md);
-            padding: 12px 16px;
-            box-shadow: var(--shadow-sm);
-            border: 1.5px solid rgba(0, 0, 0, .06);
-            margin-bottom: 14px;
-        }
-
-        .search-bar svg {
-            color: var(--text-muted);
-            flex-shrink: 0;
-        }
-
-        .search-bar input {
-            border: none;
-            outline: none;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            color: var(--text-primary);
-            background: transparent;
-            flex: 1;
-        }
-
-        .search-bar input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .mode-toggle {
-            display: flex;
-            background: var(--bg2);
-            border-radius: var(--radius-md);
-            padding: 4px;
-            margin-bottom: 12px;
-            gap: 4px;
-        }
-
-        .mode-tab {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            padding: 10px 8px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: 'Sora', sans-serif;
-        }
-
-        .mode-tab.active {
-            background: var(--surface);
-            color: var(--green-primary);
-            box-shadow: var(--shadow-sm);
-        }
-
-        #tab-sell.active {
-            color: #E65100;
-        }
-
-        .context-banner {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            background: #E8F5E9;
-            border: 1px solid #A5D6A7;
-            border-radius: var(--radius-sm);
-            padding: 9px 12px;
-            font-size: 11.5px;
-            color: #2E7D32;
-            font-weight: 500;
-            line-height: 1.45;
-            margin-bottom: 4px;
-        }
-
-        .sell-banner {
-            background: #FFF3E0;
-            border-color: #FFCC80;
-            color: #E65100;
-        }
-
-        .rentals-list {
-            padding: 4px 20px 24px;
-        }
-
-        .cards-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .r-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0, 0, 0, .05);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .r-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .r-img {
-            height: 155px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .r-img-bg {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 72px;
-            position: relative;
-        }
-
-        .r-img-bg::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(0deg, rgba(0, 0, 0, .35) 0%, transparent 60%);
-        }
-
-        .avail-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: rgba(255, 255, 255, .92);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            padding: 4px 10px;
-            font-size: 10.5px;
-            font-weight: 600;
-            color: var(--green-primary);
-            z-index: 2;
-        }
-
-        .avail-dot {
-            width: 7px;
-            height: 7px;
-            background: #00C853;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        .type-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, .55);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            padding: 4px 10px;
-            font-size: 10px;
-            font-weight: 600;
-            color: white;
-            z-index: 2;
-        }
-
-        .r-body {
-            padding: 14px 16px;
-        }
-
-        .r-title-row {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: 6px;
-        }
-
-        .r-name {
-            font-family: 'Sora', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .r-price-val {
-            font-family: 'Sora', sans-serif;
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--green-primary);
-        }
-
-        .r-price-unit {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-align: right;
-        }
-
-        .r-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .r-loc {
-            font-size: 11px;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .r-rating {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 11.5px;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .star {
-            color: var(--gold);
-            font-size: 12px;
-        }
-
-        .r-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .r-owner {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        .owner-av {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 700;
-            color: white;
-            font-family: 'Sora', sans-serif;
-        }
-
-        .owner-name {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .book-btn {
-            background: var(--green-primary);
-            color: white;
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 700;
-            font-size: 12.5px;
-            padding: 9px 18px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 3px 10px var(--green-glow);
-            transition: var(--transition);
-        }
-
-        .book-btn:hover {
-            background: #1B5E20;
-        }
-
-        /* SELL PANEL */
-        .sell-panel {
-            padding: 0 20px 24px;
-        }
-
-        .earn-card {
-            background: linear-gradient(135deg, #1B5E20, #2E7D32);
-            border-radius: var(--radius-lg);
-            padding: 18px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-            box-shadow: var(--shadow-md);
-        }
-
-        .earn-label {
-            font-size: 10.5px;
-            color: rgba(255, 255, 255, .65);
-            margin-bottom: 4px;
-            font-weight: 500;
-            letter-spacing: .04em;
-        }
-
-        .earn-amount {
-            font-family: 'Sora', sans-serif;
-            font-size: 28px;
-            font-weight: 800;
-            color: white;
-        }
-
-        .earn-sub {
-            font-size: 10px;
-            color: rgba(255, 255, 255, .55);
-            margin-top: 3px;
-        }
-
-        .add-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #E65100, #BF360C);
-            color: white;
-            font-family: 'Sora', sans-serif;
-            font-weight: 700;
-            font-size: 13px;
-            padding: 14px;
-            border-radius: var(--radius-md);
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 16px rgba(230, 81, 0, .3);
-            transition: var(--transition);
-        }
-
-        .add-btn:hover {
-            opacity: .92;
-        }
-
-        .lf-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            border: 1.5px solid rgba(230, 81, 0, .2);
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .lf-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 14px;
-        }
-
-        .lf-field {
-            margin-bottom: 14px;
-        }
-
-        .lf-field label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            letter-spacing: .05em;
-            text-transform: uppercase;
-            display: block;
-            margin-bottom: 7px;
-        }
-
-        .lf-opts {
-            display: flex;
-            gap: 7px;
-            flex-wrap: wrap;
-        }
-
-        .lf-opt {
-            padding: 7px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 11.5px;
-            font-weight: 500;
-            background: var(--bg2);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
-            border: 1.5px solid transparent;
-        }
-
-        .lf-opt.on {
-            background: #E8F5E9;
-            color: var(--green-primary);
-            border-color: rgba(46, 125, 50, .3);
-            font-weight: 700;
-        }
-
-        .lf-input-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .lf-input {
-            flex: 1;
-            background: var(--bg2);
-            border-radius: var(--radius-sm);
-            padding: 10px 14px;
-            font-family: 'Sora', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .lf-rate-toggle {
-            display: flex;
-            background: var(--bg2);
-            border-radius: var(--radius-sm);
-            padding: 3px;
-            gap: 2px;
-        }
-
-        .lf-rate-toggle span {
-            padding: 6px 10px;
-            border-radius: 7px;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-
-        .lf-rate-on {
-            background: var(--surface) !important;
-            color: var(--green-primary) !important;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .lf-days {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .lf-day {
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            background: var(--bg2);
-            color: var(--text-muted);
-        }
-
-        .lf-day.on {
-            background: #E8F5E9;
-            color: var(--green-primary);
-        }
-
-        .publish-btn {
-            width: 100%;
-            background: var(--green-primary);
-            color: white;
-            font-family: 'Sora', sans-serif;
-            font-weight: 700;
-            font-size: 13px;
-            padding: 13px;
-            border-radius: var(--radius-md);
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 16px var(--green-glow);
-        }
-
-        .sell-section-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            margin-top: 4px;
-        }
-
-        /* =====================
-           AI PA SCREEN
-        ===================== */
-        #screen-ai {
-            background: var(--bg);
-        }
-
-        .ai-header {
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .ai-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--text-primary);
-        }
-
-        .ai-title em {
-            background: linear-gradient(135deg, var(--tech-blue), var(--tech-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-style: normal;
-        }
-
-        .ai-badge {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: linear-gradient(135deg, rgba(26, 115, 232, .12), rgba(124, 77, 255, .12));
-            border: 1px solid rgba(124, 77, 255, .2);
-            border-radius: 20px;
-            padding: 5px 12px;
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--tech-purple);
-        }
-
-        .scan-zone {
-            margin: 0 20px 18px;
-            height: 210px;
-            background: linear-gradient(145deg, #0A0E1A, #0D1B2A, #0A1628);
-            border-radius: var(--radius-lg);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow-md), 0 0 0 1px rgba(26, 115, 232, .3);
-        }
-
-        .scan-grid {
-            position: absolute;
-            inset: 0;
-            background-image: linear-gradient(rgba(26, 115, 232, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(26, 115, 232, .06) 1px, transparent 1px);
-            background-size: 24px 24px;
-        }
-
-        .scan-particles {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 70% 30%, rgba(26, 115, 232, .15) 0%, transparent 60%), radial-gradient(ellipse at 30% 70%, rgba(124, 77, 255, .1) 0%, transparent 60%);
-        }
-
-        .scan-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(0, 229, 255, .2);
-            animation: ring-expand 3s ease-out infinite;
-        }
-
-        @keyframes ring-expand {
-            0% {
-                width: 100px;
-                height: 100px;
-                opacity: .5
-            }
-
-            100% {
-                width: 280px;
-                height: 280px;
-                opacity: 0
-            }
-        }
-
-        .scan-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            z-index: 2;
-            position: relative;
-        }
-
-        .scan-soil {
-            width: 90px;
-            height: 90px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 46px;
-            background: rgba(255, 255, 255, .06);
-            border: 2px dashed rgba(26, 115, 232, .5);
-            position: relative;
-        }
-
-        .sc-tl {
-            top: -2px;
-            left: -2px;
-            border-top: 2.5px solid var(--tech-blue);
-            border-left: 2.5px solid var(--tech-blue);
-            border-radius: 2px;
-            position: absolute;
-            width: 14px;
-            height: 14px;
-        }
-
-        .sc-tr {
-            top: -2px;
-            right: -2px;
-            border-top: 2.5px solid var(--tech-blue);
-            border-right: 2.5px solid var(--tech-blue);
-            border-radius: 2px;
-            position: absolute;
-            width: 14px;
-            height: 14px;
-        }
-
-        .sc-bl {
-            bottom: -2px;
-            left: -2px;
-            border-bottom: 2.5px solid var(--tech-blue);
-            border-left: 2.5px solid var(--tech-blue);
-            border-radius: 2px;
-            position: absolute;
-            width: 14px;
-            height: 14px;
-        }
-
-        .sc-br {
-            bottom: -2px;
-            right: -2px;
-            border-bottom: 2.5px solid var(--tech-blue);
-            border-right: 2.5px solid var(--tech-blue);
-            border-radius: 2px;
-            position: absolute;
-            width: 14px;
-            height: 14px;
-        }
-
-        .scan-laser {
-            position: absolute;
-            left: -2px;
-            right: -2px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--tech-blue), #00E5FF, var(--tech-blue), transparent);
-            box-shadow: 0 0 10px var(--tech-blue);
-            animation: scan-move 2s ease-in-out infinite;
-            z-index: 3;
-        }
-
-        @keyframes scan-move {
-            0% {
-                top: 0;
-                opacity: 0
-            }
-
-            10% {
-                opacity: 1
-            }
-
-            90% {
-                opacity: 1
-            }
-
-            100% {
-                top: 100%;
-                opacity: 0
-            }
-        }
-
-        .scan-text {
-            font-size: 11px;
-            color: rgba(255, 255, 255, .5);
-            font-weight: 500;
-            letter-spacing: .05em;
-        }
-
-        .scan-upload {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(26, 115, 232, .2);
-            border: 1px solid rgba(26, 115, 232, .4);
-            border-radius: 20px;
-            padding: 7px 14px;
-            color: #64B5F6;
-            font-size: 11.5px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .vf-laser-ai {
-            position: absolute;
-            left: 20px;
-            right: 20px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--tech-blue), #00E5FF, var(--tech-blue), transparent);
-            animation: scan-move 2s ease-in-out infinite;
-            z-index: 5;
-        }
-
-        .ai-result-card {
-            margin: 0 20px 18px;
-            background: linear-gradient(135deg, rgba(26, 115, 232, .06), rgba(124, 77, 255, .06));
-            border: 1.5px solid rgba(124, 77, 255, .2);
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ai-result-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--tech-blue), var(--tech-purple));
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        }
-
-        .ai-result-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 14px;
-        }
-
-        .ai-result-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--tech-blue), var(--tech-purple));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-
-        .ai-result-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .ai-result-sub {
-            font-size: 10.5px;
-            color: var(--text-muted);
-        }
-
-        .chips {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .chip {
-            padding: 7px 14px;
-            border-radius: var(--radius-md);
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .chip-soil {
-            background: linear-gradient(135deg, #EFEBE9, #D7CCC8);
-            color: #4E342E;
-        }
-
-        .chip-crop {
-            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
-            color: var(--green-primary);
-        }
-
-        .chip-water {
-            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
-            color: #1565C0;
-        }
-
-        .chip-conf {
-            background: linear-gradient(135deg, rgba(124, 77, 255, .1), rgba(26, 115, 232, .1));
-            color: var(--tech-purple);
-            border: 1px solid rgba(124, 77, 255, .2);
-            font-size: 11px;
-            padding: 6px 12px;
-            margin-left: auto;
-        }
-
-        .journey-timeline {
-            padding: 0 20px 24px;
-        }
-
-        .journey-tl-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .tl-item {
-            display: flex;
-            gap: 14px;
-            position: relative;
-            padding-bottom: 20px;
-        }
-
-        .tl-item:last-child {
-            padding-bottom: 0;
-        }
-
-        .tl-left {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 36px;
-            flex-shrink: 0;
-        }
-
-        .tl-node {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        .tl-node-done {
-            background: var(--green-primary);
-        }
-
-        .tl-node-active {
-            background: white;
-            border: 2.5px solid var(--green-primary);
-            box-shadow: 0 0 0 5px var(--green-glow);
-        }
-
-        .tl-node-todo {
-            background: var(--bg2);
-        }
-
-        .tl-conn {
-            flex: 1;
-            width: 2px;
-            background: var(--bg2);
-            margin: 3px 0;
-        }
-
-        .tl-conn.done {
-            background: var(--green-primary);
-        }
-
-        .tl-conn.active {
-            background: linear-gradient(to bottom, var(--green-primary), var(--bg2));
-        }
-
-        .tl-right {
-            flex: 1;
-        }
-
-        .tl-card {
-            background: var(--surface);
-            border-radius: var(--radius-md);
-            padding: 12px 14px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0, 0, 0, .05);
-        }
-
-        .tl-active .tl-card {
-            border-color: rgba(46, 125, 50, .25);
-            background: linear-gradient(135deg, white, #F1F8E9);
-            box-shadow: 0 4px 16px var(--green-glow);
-        }
-
-        .tl-todo .tl-card {
-            opacity: .65;
-        }
-
-        .tl-card-hd {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 4px;
-        }
-
-        .tl-card-name {
-            font-family: 'Sora', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .tl-card-date {
-            font-size: 10px;
-            color: var(--text-muted);
-        }
-
-        .tl-card-desc {
-            font-size: 11.5px;
-            color: var(--text-secondary);
-            line-height: 1.45;
-        }
-
-        .tl-active-lbl {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--green-pale);
-            color: var(--green-primary);
-            font-size: 9.5px;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 10px;
-            margin-top: 6px;
-            letter-spacing: .04em;
-            text-transform: uppercase;
-        }
-
-        /* =====================
-           DIAGNOSE SCREEN
-        ===================== */
-        #screen-diagnose {
-            background: #06080E;
-            overflow: hidden;
-        }
-
-        .diagnose-wrap {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .vf-area {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(ellipse at center, #0A1628 0%, #020408 100%);
-        }
-
-        .vf-grid {
-            position: absolute;
-            inset: 0;
-            background-image: linear-gradient(rgba(0, 229, 255, .03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, .03) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        .vf-topbar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 10;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, .6), transparent);
-        }
-
-        .vf-back {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, .1);
-            backdrop-filter: blur(8px);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: white;
-        }
-
-        .vf-title-bar {
-            font-family: 'Sora', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .vf-dot {
-            width: 7px;
-            height: 7px;
-            background: #F44336;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        .vf-flash {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, .1);
-            backdrop-filter: blur(8px);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: white;
-        }
-
-        .leaf-subject {
-            width: 220px;
-            height: 220px;
-            position: relative;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .leaf-emoji {
-            font-size: 100px;
-            filter: drop-shadow(0 8px 24px rgba(0, 0, 0, .5));
-            animation: leaf-sway 4s ease-in-out infinite;
-        }
-
-        @keyframes leaf-sway {
-
-            0%,
-            100% {
-                transform: rotate(-4deg)
-            }
-
-            50% {
-                transform: rotate(4deg)
-            }
-        }
-
-        .cb {
-            position: absolute;
-            width: 28px;
-            height: 28px;
-            z-index: 3;
-        }
-
-        .cb-tl {
-            top: -4px;
-            left: -4px;
-            border-top: 2.5px solid #00E5FF;
-            border-left: 2.5px solid #00E5FF;
-            border-radius: 4px 0 0 0;
-        }
-
-        .cb-tr {
-            top: -4px;
-            right: -4px;
-            border-top: 2.5px solid #00E5FF;
-            border-right: 2.5px solid #00E5FF;
-            border-radius: 0 4px 0 0;
-        }
-
-        .cb-bl {
-            bottom: -4px;
-            left: -4px;
-            border-bottom: 2.5px solid #00E5FF;
-            border-left: 2.5px solid #00E5FF;
-            border-radius: 0 0 0 4px;
-        }
-
-        .cb-br {
-            bottom: -4px;
-            right: -4px;
-            border-bottom: 2.5px solid #00E5FF;
-            border-right: 2.5px solid #00E5FF;
-            border-radius: 0 0 4px 0;
-        }
-
-        .vf-laser {
-            position: absolute;
-            left: 20px;
-            right: 20px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #F44336 20%, #FF6B6B 50%, #F44336 80%, transparent 100%);
-            box-shadow: 0 0 12px #F44336;
-            animation: vf-laser 2.5s ease-in-out infinite;
-            z-index: 5;
-        }
-
-        @keyframes vf-laser {
-            0% {
-                top: 15%;
-                opacity: 0
-            }
-
-            8% {
-                opacity: 1
-            }
-
-            92% {
-                opacity: 1
-            }
-
-            100% {
-                top: 85%;
-                opacity: 0
-            }
-        }
-
-        .vf-hint-wrap {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            z-index: 10;
-        }
-
-        .vf-hint {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, .1);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, .15);
-            border-radius: 20px;
-            padding: 7px 14px;
-            font-size: 11px;
-            color: rgba(255, 255, 255, .75);
-            font-weight: 500;
-        }
-
-        .diag-sheet {
-            background: var(--surface);
-            border-radius: 24px 24px 0 0;
-            padding: 0 20px 20px;
-            position: relative;
-            box-shadow: 0 -8px 40px rgba(0, 0, 0, .25);
-            max-height: 360px;
-            overflow-y: auto;
-        }
-
-        .diag-sheet::-webkit-scrollbar {
-            display: none;
-        }
-
-        .sheet-handle {
-            width: 40px;
-            height: 4px;
-            background: #E0E0E0;
-            border-radius: 2px;
-            margin: 14px auto 16px;
-        }
-
-        .disease-alert {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--warning-pale);
-            border: 1.5px solid #FFCDD2;
-            border-radius: var(--radius-md);
-            padding: 12px 14px;
-            margin-bottom: 16px;
-        }
-
-        .disease-icon-wrap {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .disease-name {
-            font-family: 'Sora', sans-serif;
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--warning);
-        }
-
-        .disease-sev {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 10.5px;
-            color: #B71C1C;
-            font-weight: 500;
-            margin-top: 2px;
-        }
-
-        .sev-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--warning);
-            border-radius: 50%;
-        }
-
-        .sheet-section {
-            font-family: 'Sora', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-muted);
-            letter-spacing: .06em;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            margin-top: 14px;
-        }
-
-        .disease-about {
-            font-size: 12.5px;
-            color: var(--text-secondary);
-            line-height: 1.55;
-            margin-bottom: 4px;
-        }
-
-        .treatment-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .treatment-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--bg);
-            border-radius: var(--radius-sm);
-            padding: 10px 12px;
-        }
-
-        .t-num {
-            width: 22px;
-            height: 22px;
-            background: var(--green-pale);
-            color: var(--green-primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            flex-shrink: 0;
-            font-family: 'Sora', sans-serif;
-        }
-
-        .t-text {
-            font-size: 12px;
-            color: var(--text-secondary);
-            flex: 1;
-            line-height: 1.4;
-        }
-
-        .order-btn {
-            width: 100%;
-            background: linear-gradient(135deg, var(--warning), #C62828);
-            color: white;
-            font-family: 'Sora', sans-serif;
-            font-weight: 700;
-            font-size: 13px;
-            padding: 14px;
-            border-radius: var(--radius-md);
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 16px;
-            box-shadow: 0 4px 16px rgba(229, 57, 53, .35);
-            transition: var(--transition);
-        }
-
-        /* ============================
-           RESPONSIVE
-        ============================ */
-        @media (min-width:768px) {
-            .top-bar {
-                display: flex;
-            }
-
-            .sidebar {
-                display: flex;
-            }
-
-            .bottom-nav {
-                display: none;
-            }
-
-            :root {
-                --sidebar-w: 240px;
-            }
-
-            .home-header,
-            .rentals-header,
-            .ai-header,
-            .vf-topbar {
-                padding: 20px 28px;
-            }
-
-            .weather-strip,
-            .hero-card,
-            .journey-card,
-            .alert-bar {
-                margin-left: 28px;
-                margin-right: 28px;
-            }
-
-            .section-label,
-            .quick-grid,
-            .rentals-list,
-            .journey-timeline,
-            .sell-panel {
-                padding-left: 28px;
-                padding-right: 28px;
-            }
-
-            .scan-zone,
-            .ai-result-card {
-                margin-left: 28px;
-                margin-right: 28px;
-            }
-
-            .scan-zone {
-                height: 240px;
-            }
-
-            .diag-sheet {
-                max-height: 420px;
-            }
-
-            .quick-icon {
-                width: 68px;
-                height: 68px;
-            }
-        }
-
-        @media (min-width:1024px) {
-            :root {
-                --sidebar-w: 256px;
-            }
-
-            .greeting-name {
-                font-size: 26px;
-            }
-
-            .rentals-title {
-                font-size: 28px;
-            }
-
-            .hero-title {
-                font-size: 24px;
-            }
-
-            .cards-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 16px;
-            }
-
-            .scan-zone {
-                height: 260px;
-            }
-
-            .quick-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 16px;
-            }
-
-            .quick-icon {
-                width: 72px;
-                height: 72px;
-                font-size: 28px;
-            }
-        }
-
-        @media (min-width:1280px) {
-            :root {
-                --sidebar-w: 272px;
-            }
-        }
-    </style>
 </head>
-
 <body>
 
-    <!-- TOP BAR (desktop) -->
-    <header class="top-bar">
-        <div class="brand">
-            <span class="brand-green">🌱 Gravi</span><span class="brand-dark">too</span>
+<!-- ==================== SPLASH & LOGIN SCREEN ==================== -->
+<div id="login-screen" style="position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+  <img src="startup.png" alt="Gravitoo Logo" style="width:120px;height:120px;margin-bottom:20px;border-radius:24px;box-shadow:0 8px 24px rgba(0,0,0,0.1); object-fit: cover; background: #fff;">
+  <h1 style="font-family:'Sora', sans-serif;font-size:28px;margin-bottom:8px;color:var(--text-main);">Gravitoo</h1>
+  <p style="color:var(--muted);margin-bottom:32px;">Smart Agri-Tech Platform</p>
+  <button onclick="handleLogin()" style="display:flex;align-items:center;gap:12px;background:white;color:#333;border:1px solid #ddd;padding:12px 24px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+    <img src="googlg.png" alt="Google Logo" style="width: 24px; height: 24px; object-fit: contain;">
+    Continue with Gmail
+  </button>
+</div>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeMobileSidebar()"></div>
+
+<div class="app-shell" id="app-shell" style="display: none;">
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">🌾</div>
+      <span class="logo-text">Gravi<span>too</span></span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-link active" id="snav-home" onclick="switchPage('home')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="nl-label">Dashboard</span>
+      </div>
+      <div class="nav-link" id="snav-rentals" onclick="switchPage('rentals')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span class="nl-label">Rentals</span>
+      </div>
+      <div class="nav-link ai-link" id="snav-ai" onclick="switchPage('ai')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span class="nl-label">FarmGuru</span>
+      </div>
+      <div class="nav-link" id="snav-notif" onclick="switchPage('notif')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="nl-label">Alerts</span>
+        <span class="nl-badge">3</span>
+      </div>
+      <div class="nav-link" id="snav-diagnose" onclick="switchPage('diagnose')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="nl-label">Diagnose</span>
+      </div>
+    </nav>
+
+    <div class="sidebar-collapse-btn" id="collapse-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+
+    <div class="sidebar-profile">
+      <div class="profile-avatar">DP</div>
+      <div class="profile-info">
+        <div class="profile-name">Devanshu Pise</div>
+        <div class="profile-role">Farmer · Nagpur</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN AREA ==================== -->
+  <div class="main-area" id="main-area">
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-hamburger" id="hamburger-btn" onclick="openMobileSidebar()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </div>
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search crops, equipment, services...">
+      </div>
+      <div class="topbar-actions">
+        <div class="weather-chip">⛅ 34°C &nbsp;·&nbsp; 72% Humidity</div>
+        <button class="publish-btn" style="padding: 8px 16px; font-size: 13px; margin-right: 10px;" onclick="switchPage('ai')">+ Add Farm</button>
+        <div class="topbar-icon-btn" id="topbar-notif-btn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <div class="notif-dot"></div>
         </div>
-        <div class="top-user">
-            <div class="avatar-circle">D</div>
-            <div class="user-meta">
-                <div class="name">Devanshu Pise</div>
-                <div class="role">Wheat · Field A · 3.2 ha</div>
-            </div>
+        <div class="topbar-icon-btn" id="topbar-cart-btn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <div class="cart-count">1</div>
         </div>
+      </div>
     </header>
 
-    <div class="app-layout">
+    <!-- PAGE CONTENT -->
+    <main class="page-content">
 
-        <!-- SIDEBAR (desktop) -->
-        <aside class="sidebar">
-            <div class="sb-section">Main</div>
-            <div class="sb-item active" id="sb-home" onclick="switchTab('home')">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                    <polyline points="9 22 9 12 15 12 15 22" />
-                </svg>
-                Home
+      <!-- ==================== HOME PAGE ==================== -->
+      <div class="page active" id="page-home">
+        <!-- Stats Row -->
+        <div class="home-stats-row" id="home-stats-container">
+          <div style="background:white;padding:16px;border-radius:16px;border:1px solid #eee;flex:1;min-width:140px;">
+            <div style="font-size:24px;font-weight:700;color:var(--green);margin-bottom:4px;">2</div>
+            <div style="font-size:13px;color:var(--muted);font-weight:500;">Active Farms</div>
+          </div>
+          <div style="background:white;padding:16px;border-radius:16px;border:1px solid #eee;flex:1;min-width:140px;">
+            <div style="font-size:24px;font-weight:700;color:var(--text-main);margin-bottom:4px;">₹12,400</div>
+            <div style="font-size:13px;color:var(--muted);font-weight:500;">Rental Earnings</div>
+          </div>
+          <div style="background:white;padding:16px;border-radius:16px;border:1px solid #eee;flex:1;min-width:140px;">
+            <div style="font-size:24px;font-weight:700;color:var(--text-main);margin-bottom:4px;">94%</div>
+            <div style="font-size:13px;color:var(--muted);font-weight:500;">Overall Crop Health</div>
+          </div>
+        </div>
+
+        <!-- Alert bar -->
+        <div class="alert-bar" id="home-alert-bar" style="display:none;margin-bottom:24px;"></div>
+
+        <!-- Main Grid -->
+        <div class="home-main-grid">
+          <div class="home-left">
+            <!-- Hero Card -->
+            <div class="hero-card" id="home-hero-card">
+              <div class="hero-title">Welcome to Gravitoo!</div>
+              <div class="hero-sub">Add a farm to get AI-powered crop suggestions and track your journey.</div>
+              <button class="hero-cta" onclick="switchPage('ai')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Add Farm
+              </button>
+              <div class="hero-emoji">🌾</div>
             </div>
-            <div class="sb-item" id="sb-rentals" onclick="switchTab('rentals')">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="1" y="3" width="15" height="13" />
-                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-                    <circle cx="5.5" cy="18.5" r="2.5" />
-                    <circle cx="18.5" cy="18.5" r="2.5" />
-                </svg>
-                Rental Marketplace
+
+            <!-- Quick Access -->
+            <div class="card" style="padding:20px;">
+              <div class="card-title">Quick Access <span class="card-title-action">See All</span></div>
+              <div class="quick-grid">
+                <div class="quick-item" onclick="switchPage('rentals'); setTimeout(()=>setRentalTab('hire'),100)">
+                  <div class="quick-icon qi-1">🤝</div>
+                  <span class="quick-label">Hire Service</span>
+                </div>
+                <div class="quick-item" onclick="switchPage('rentals'); setTimeout(()=>setRentalTab('sell'),100)">
+                  <div class="quick-icon qi-2">💰</div>
+                  <span class="quick-label">Sell Service</span>
+                </div>
+                <div class="quick-item" onclick="switchPage('rentals'); setTimeout(()=>setRentalTab('hire'),100)">
+                  <div class="quick-icon qi-3">👷</div>
+                  <span class="quick-label">Labor Hire</span>
+                </div>
+                <div class="quick-item" onclick="switchPage('diagnose')">
+                  <div class="quick-icon qi-4">🔬</div>
+                  <span class="quick-label">Diagnose</span>
+                </div>
+              </div>
             </div>
-            <div class="sb-item" id="sb-diagnose" onclick="switchTab('diagnose')">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-                Disease Diagnose
+
+            <!-- Crop Journey -->
+            <div class="card" id="home-journey-card" style="padding: 24px; border-radius: 24px; background: #ffffff; border: 1px solid #f3f4f6; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="width: 48px; height: 48px; border-radius: 12px; background: #cce4c9; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 24px; height: 24px; color: #2e6b2d;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v6m0-13v2"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0;">Wheat — Kharif 2025</h3>
+                    <p style="font-size: 14px; color: #6b7280; margin: 4px 0 0 0;">Field A · 3.2 hectares</p>
+                  </div>
+                </div>
+                <span style="background: #cce4c9; color: #2e6b2d; font-size: 14px; font-weight: 600; padding: 6px 16px; border-radius: 9999px;">
+                  Day 14
+                </span>
+              </div>
+
+              <div style="margin-bottom: 32px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; font-weight: 500;">
+                  <span style="color: #9ca3af;">Sowing Complete</span>
+                  <span style="color: #2e6b2d;">28% done</span>
+                </div>
+                <div style="width: 100%; height: 12px; background: #f0ede6; border-radius: 9999px; overflow: hidden; position: relative;">
+                  <div style="height: 100%; background: #3a8b39; width: 28%; border-right: 3px solid #ffffff; border-top-left-radius: 9999px; border-bottom-left-radius: 9999px;"></div>
+                </div>
+              </div>
+
+              <div style="position: relative; padding: 0 8px; margin-top: 16px; padding-bottom: 8px;">
+                <!-- Connecting Line -->
+                <div style="position: absolute; left: 0; top: 11px; width: 100%; height: 2px; background: #f0ede6; z-index: 0;"></div>
+
+                <div style="display: flex; justify-content: space-between; position: relative; z-index: 10;">
+                  
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                    <div style="width: 24px; height: 24px; border-radius: 50%; background: #3a8b39; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 6px #ffffff;">
+                      <svg style="width: 14px; height: 14px; color: #ffffff;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </div>
+                    <span style="font-size: 12px; color: #9ca3af; font-weight: 500;">Plow</span>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                    <div style="width: 24px; height: 24px; border-radius: 50%; background: #3a8b39; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 6px #ffffff;">
+                      <svg style="width: 14px; height: 14px; color: #ffffff;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </div>
+                    <span style="font-size: 12px; color: #9ca3af; font-weight: 500;">Sow</span>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                    <div style="width: 24px; height: 24px; border-radius: 50%; background: #ffffff; border: 2px solid #3a8b39; box-shadow: 0 0 0 6px #eaf3ea; box-sizing: border-box;"></div>
+                    <span style="font-size: 12px; color: #3a8b39; font-weight: 700;">Irrigate</span>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                    <div style="width: 24px; height: 24px; border-radius: 50%; background: #ebe9e4; box-shadow: 0 0 0 6px #ffffff;"></div>
+                    <span style="font-size: 12px; color: #9ca3af; font-weight: 500;">Fertilize</span>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                    <div style="width: 24px; height: 24px; border-radius: 50%; background: #ebe9e4; box-shadow: 0 0 0 6px #ffffff;"></div>
+                    <span style="font-size: 12px; color: #9ca3af; font-weight: 500;">Harvest</span>
+                  </div>
+
+                </div>
+              </div>
             </div>
-            <div class="sb-section">AI Tools</div>
-            <div class="sb-ai" id="sb-ai" onclick="switchTab('ai')">
-                <div class="sb-ai-icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                    </svg>
+          </div>
+
+          <div class="home-right">
+            <!-- Weather -->
+            <div class="weather-card" id="home-weather-card">
+              <div class="card-title">Today's Weather</div>
+              <div class="weather-main">
+                <div class="weather-icon-big">⛅</div>
+                <div>
+                <div class="weather-temp">34°C</div>
+                <div class="weather-location">Nagpur, Maharashtra</div>
                 </div>
-                AI Farm PA
+              </div>
             </div>
-            <div class="sb-footer">
-                <div class="sb-item">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                    </svg>
-                    Alerts
-                </div>
-                <div class="sb-item">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
-                    </svg>
-                    Profile
-                </div>
+
+            <!-- AI Promo -->
+            <div id="home-ai-promo-container"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== RENTALS PAGE ==================== -->
+      <div class="page" id="page-rentals">
+        <div class="page-header">
+          <div class="page-header-title">Rental <span>Marketplace</span></div>
+          <div class="rental-mode-toggle">
+            <div class="rmt-tab rmt-active" id="tab-hire" onclick="setRentalTab('hire')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              Hire a Service
             </div>
-        </aside>
+            <div class="rmt-tab" id="tab-sell" onclick="setRentalTab('sell')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M16 16v4M8 16v4M12 14v6M20 16a8 8 0 1 0-16 0"/></svg>
+              Sell My Service
+            </div>
+          </div>
+        </div>
 
-        <!-- MAIN CONTENT -->
-        <div class="main">
-            <div class="screens-wrapper">
+        <div class="rentals-search-row">
+          <div class="rentals-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Search equipment or service near you...">
+          </div>
+        </div>
 
-                <!-- ===== HOME ===== -->
-                <div class="screen active" id="screen-home">
-                    <div class="home-header">
-                        <div>
-                            <div class="greeting-sub">Good Morning 🌤️</div>
-                            <div class="greeting-name">Hello, <em>Devanshu!</em></div>
-                        </div>
-                        <div class="header-actions">
-                            <div class="icon-btn">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                                </svg>
-                                <div class="notif-dot"></div>
-                            </div>
-                            <div class="icon-btn">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="9" cy="21" r="1" />
-                                    <circle cx="20" cy="21" r="1" />
-                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                                </svg>
-                                <div class="cart-dot">2</div>
-                            </div>
-                        </div>
-                    </div>
+        <!-- HIRE PANEL -->
+        <div id="hire-panel">
+          <div class="context-banner context-hire">
+            🔍 &nbsp; Browse equipment &amp; services offered by farmers near you. Pay per hour or per day.
+          </div>
+          <div class="sell-grid" style="margin-top: 20px;">
+            <div class="my-listing-card" style="background: white; border: 1px solid #eee;">
+              <div class="my-listing-img" style="font-size: 28px;">🚜</div>
+              <div class="my-listing-info">
+                <div class="my-listing-name" style="font-weight: 600;">Swaraj 744 FE Tractor</div>
+                <div class="my-listing-rate" style="color: var(--green); font-weight: 500; font-size: 14px;">₹700 / hour</div>
+                <div class="my-listing-stats" style="color:var(--muted); font-size:12px; margin-top:4px;">Available Now · 2.4 km away</div>
+              </div>
+              <button class="publish-btn" style="padding: 6px 16px;">Hire</button>
+            </div>
+            <div class="my-listing-card" style="background: white; border: 1px solid #eee;">
+              <div class="my-listing-img" style="font-size: 28px;">🚁</div>
+              <div class="my-listing-info">
+                <div class="my-listing-name" style="font-weight: 600;">Agri Spray Drone</div>
+                <div class="my-listing-rate" style="color: var(--green); font-weight: 500; font-size: 14px;">₹1200 / acre</div>
+                <div class="my-listing-stats" style="color:var(--muted); font-size:12px; margin-top:4px;">Available Tomorrow · 5.1 km away</div>
+              </div>
+              <button class="publish-btn" style="padding: 6px 16px;">Hire</button>
+            </div>
+          </div>
+        </div>
 
-                    <div class="weather-strip">
-                        <div class="weather-left">
-                            <div class="weather-icon">⛅</div>
-                            <div>
-                                <div class="weather-temp">34°C</div>
-                                <div class="weather-loc">Nagpur, Maharashtra</div>
-                            </div>
-                        </div>
-                        <div class="weather-stats">
-                            <div>
-                                <div class="wstat-val">72%</div>
-                                <div class="wstat-lbl">Humidity</div>
-                            </div>
-                            <div>
-                                <div class="wstat-val">18 km/h</div>
-                                <div class="wstat-lbl">Wind</div>
-                            </div>
-                            <div>
-                                <div class="wstat-val">Good</div>
-                                <div class="wstat-lbl">Soil</div>
-                            </div>
-                        </div>
-                    </div>
+        <!-- SELL PANEL -->
+        <div id="sell-panel" style="display:none;">
+          <div class="context-banner context-sell">
+            💡 &nbsp; List your equipment or labour. Earn daily wages whenever your gear is idle.
+          </div>
 
-                    <div class="hero-card">
-                        <div class="hero-badge">
-                            <div class="hero-dot"></div>AI Farm PA — Active
-                        </div>
-                        <div class="hero-title">Your Smart Farm<br>Assistant is Ready</div>
-                        <div class="hero-sub">Scan your soil to start your crop journey.</div>
-                        <div class="hero-cta">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="23 7 16 12 23 17 23 7" />
-                                <rect x="1" y="5" width="15" height="14" rx="2" />
-                            </svg>
-                            Scan Now
-                        </div>
-                        <div class="hero-emoji">🌾</div>
-                    </div>
-
-                    <div class="section-label">Quick Access <a href="#">See All</a></div>
-                    <div class="quick-grid">
-                        <div class="quick-item" onclick="switchTab('rentals');setRentalTab('hire')">
-                            <div class="quick-icon qi-1">🤝</div><span class="quick-label">Hire Service</span>
-                        </div>
-                        <div class="quick-item" onclick="switchTab('rentals');setRentalTab('sell')">
-                            <div class="quick-icon qi-2">💰</div><span class="quick-label">Sell Service</span>
-                        </div>
-                        <div class="quick-item" onclick="switchTab('rentals');setRentalTab('hire')">
-                            <div class="quick-icon qi-3">👷</div><span class="quick-label">Labor Hire</span>
-                        </div>
-                        <div class="quick-item" onclick="switchTab('diagnose')">
-                            <div class="quick-icon qi-4">🔬</div><span class="quick-label">Disease Diagnose</span>
-                        </div>
-                    </div>
-
-                    <div class="alert-bar">
-                        <span>💧</span>
-                        <span>⚠️ <strong>Irrigation Alert:</strong> Wheat fields need water in the next 24 hours.</span>
-                    </div>
-
-                    <div class="section-label">Active Crop Journey</div>
-                    <div class="journey-card">
-                        <div class="journey-header">
-                            <div class="journey-crop">
-                                <div class="crop-avatar">🌾</div>
-                                <div>
-                                    <div class="crop-name">Wheat — Kharif 2025</div>
-                                    <div class="crop-sub">Field A · 3.2 hectares</div>
-                                </div>
-                            </div>
-                            <div class="day-badge">Day 14</div>
-                        </div>
-                        <div class="progress-labels"><span>Sowing Complete</span><span>28% done</span></div>
-                        <div class="progress-track">
-                            <div class="progress-fill"></div>
-                        </div>
-                        <div class="mini-timeline">
-                            <div class="tl-node-wrap">
-                                <div class="tnode tnode-done" style="color:white;font-size:11px;">✓</div><span
-                                    class="tnode-lbl">Plow</span>
-                            </div>
-                            <div class="tl-node-wrap">
-                                <div class="tnode tnode-done" style="color:white;font-size:11px;">✓</div><span
-                                    class="tnode-lbl">Sow</span>
-                            </div>
-                            <div class="tl-node-wrap">
-                                <div class="tnode tnode-active"></div><span class="tnode-lbl"
-                                    style="color:var(--green-primary);font-weight:700;">Irrigate</span>
-                            </div>
-                            <div class="tl-node-wrap">
-                                <div class="tnode tnode-todo"></div><span class="tnode-lbl">Fertilize</span>
-                            </div>
-                            <div class="tl-node-wrap">
-                                <div class="tnode tnode-todo"></div><span class="tnode-lbl">Harvest</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="height:16px;"></div>
+          <div class="sell-grid">
+            <div>
+              <div class="sell-earnings-card">
+                <div class="sell-earn-left">
+                  <div class="sell-earn-label">Total Earned This Month</div>
+                  <div class="sell-earn-amount">₹12,400</div>
+                  <div class="sell-earn-sub">2 active bookings right now</div>
                 </div>
+                <div class="sell-earn-icon">💸</div>
+              </div>
 
-                <!-- ===== RENTALS ===== -->
-                <div class="screen" id="screen-rentals">
-                    <div class="rentals-header">
-                        <div class="rentals-title">Rental <em>Marketplace</em></div>
-                        <div class="search-bar">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8" />
-                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                            </svg>
-                            <input type="text" placeholder="Search equipment or service..." readonly>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="4" y1="6" x2="20" y2="6" />
-                                <line x1="8" y1="12" x2="16" y2="12" />
-                                <line x1="11" y1="18" x2="13" y2="18" />
-                            </svg>
-                        </div>
-                        <div class="mode-toggle">
-                            <div class="mode-tab active" id="tab-hire" onclick="setRentalTab('hire')">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path
-                                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                                </svg>
-                                Hire a Service
-                            </div>
-                            <div class="mode-tab" id="tab-sell" onclick="setRentalTab('sell')">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="8" r="4" />
-                                    <path d="M16 16v4M8 16v4M12 14v6M20 16a8 8 0 1 0-16 0" />
-                                </svg>
-                                Sell My Service
-                            </div>
-                        </div>
-                        <div class="context-banner" id="hire-context"><span>🔍</span><span>Browse equipment & services
-                                offered by farmers near you. Pay per hour or per day.</span></div>
-                        <div class="context-banner sell-banner" id="sell-context" style="display:none;">
-                            <span>💡</span><span>List your equipment or labour. Earn daily wages whenever your gear is
-                                idle.</span></div>
-                    </div>
+              <div class="sell-section-title">My Active Listings</div>
+              <div id="my-listings-container">
+                <!-- JS will populate this from the backend -->
+              </div>
+            </div>
 
-                    <!-- HIRE PANEL -->
-                    <div id="hire-panel">
-                        <div class="rentals-list">
-                            <div class="cards-grid">
-                                <div class="r-card">
-                                    <div class="r-img">
-                                        <div class="r-img-bg"
-                                            style="background:linear-gradient(135deg,#1B4332,#2D6A4F);">🚜</div>
-                                        <div class="avail-badge">
-                                            <div class="avail-dot"></div>Available Now
-                                        </div>
-                                        <div class="type-badge">Tractor</div>
-                                    </div>
-                                    <div class="r-body">
-                                        <div class="r-title-row">
-                                            <div class="r-name">Mahindra 575 DI<br><span
-                                                    style="font-size:11px;font-weight:400;color:var(--text-muted);">55
-                                                    HP · 4WD · PTO Ready</span></div>
-                                            <div>
-                                                <div class="r-price-val">₹850</div>
-                                                <div class="r-price-unit">per hour</div>
-                                            </div>
-                                        </div>
-                                        <div class="r-meta">
-                                            <div class="r-loc"><svg width="10" height="10" viewBox="0 0 24 24"
-                                                    fill="none" stroke="currentColor" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                                    <circle cx="12" cy="10" r="3" />
-                                                </svg> 4.2 km away</div>
-                                            <div class="r-rating"><span class="star">★</span>4.8 <span
-                                                    style="color:var(--text-muted);font-weight:400;">(142)</span></div>
-                                        </div>
-                                        <div class="r-footer">
-                                            <div class="r-owner">
-                                                <div class="owner-av"
-                                                    style="background:linear-gradient(135deg,#2E7D32,#1B5E20);">R</div>
-                                                <span class="owner-name">Ramesh Kumar</span>
-                                            </div><button class="book-btn">Book Now</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="r-card">
-                                    <div class="r-img">
-                                        <div class="r-img-bg"
-                                            style="background:linear-gradient(135deg,#0D1B2A,#1A3A5C);">🚁</div>
-                                        <div class="avail-badge">
-                                            <div class="avail-dot"></div>Available Now
-                                        </div>
-                                        <div class="type-badge">Drone</div>
-                                    </div>
-                                    <div class="r-body">
-                                        <div class="r-title-row">
-                                            <div class="r-name">Agri Drone X20<br><span
-                                                    style="font-size:11px;font-weight:400;color:var(--text-muted);">10L
-                                                    Tank · GPS Auto · 20ac/hr</span></div>
-                                            <div>
-                                                <div class="r-price-val">₹1,200</div>
-                                                <div class="r-price-unit">per hour</div>
-                                            </div>
-                                        </div>
-                                        <div class="r-meta">
-                                            <div class="r-loc"><svg width="10" height="10" viewBox="0 0 24 24"
-                                                    fill="none" stroke="currentColor" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                                    <circle cx="12" cy="10" r="3" />
-                                                </svg> 7.8 km away</div>
-                                            <div class="r-rating"><span class="star">★</span>4.9 <span
-                                                    style="color:var(--text-muted);font-weight:400;">(89)</span></div>
-                                        </div>
-                                        <div class="r-footer">
-                                            <div class="r-owner">
-                                                <div class="owner-av"
-                                                    style="background:linear-gradient(135deg,#1565C0,#0D47A1);">S</div>
-                                                <span class="owner-name">Sanjay Patil</span>
-                                            </div><button class="book-btn">Book Now</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="r-card">
-                                    <div class="r-img">
-                                        <div class="r-img-bg"
-                                            style="background:linear-gradient(135deg,#3E2723,#5D4037);">🌾</div>
-                                        <div class="avail-badge" style="color:#FF8F00;">
-                                            <div class="avail-dot" style="background:#FF8F00;animation:none;"></div>From
-                                            Tomorrow
-                                        </div>
-                                        <div class="type-badge">Harvester</div>
-                                    </div>
-                                    <div class="r-body">
-                                        <div class="r-title-row">
-                                            <div class="r-name">John Deere W540<br><span
-                                                    style="font-size:11px;font-weight:400;color:var(--text-muted);">Combine
-                                                    · 170 HP · Wide Header</span></div>
-                                            <div>
-                                                <div class="r-price-val">₹4,500</div>
-                                                <div class="r-price-unit">per day</div>
-                                            </div>
-                                        </div>
-                                        <div class="r-meta">
-                                            <div class="r-loc"><svg width="10" height="10" viewBox="0 0 24 24"
-                                                    fill="none" stroke="currentColor" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                                    <circle cx="12" cy="10" r="3" />
-                                                </svg> 12 km away</div>
-                                            <div class="r-rating"><span class="star">★</span>4.7 <span
-                                                    style="color:var(--text-muted);font-weight:400;">(56)</span></div>
-                                        </div>
-                                        <div class="r-footer">
-                                            <div class="r-owner">
-                                                <div class="owner-av"
-                                                    style="background:linear-gradient(135deg,#8D6E63,#6D4C41);">V</div>
-                                                <span class="owner-name">Vikas Deshmukh</span>
-                                            </div><button class="book-btn">Hire Now</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SELL PANEL -->
-                    <div id="sell-panel" style="display:none;">
-                        <div class="sell-panel">
-                            <div class="earn-card">
-                                <div>
-                                    <div class="earn-label">Total Earned This Month</div>
-                                    <div class="earn-amount">₹12,400</div>
-                                    <div class="earn-sub">From 3 active listings · 8 bookings</div>
-                                </div>
-                                <div style="font-size:40px;opacity:.6;">💸</div>
-                            </div>
-                            <div class="add-btn" onclick="toggleListingForm()">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white"
-                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19" />
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                </svg>
-                                List New Equipment / Service
-                            </div>
-                            <div id="listing-form" style="display:none;">
-                                <div class="lf-card">
-                                    <div class="lf-title">📋 New Listing Details</div>
-                                    <div class="lf-field"><label>Equipment / Service Type</label>
-                                        <div class="lf-opts">
-                                            <div class="lf-opt on">🚜 Tractor</div>
-                                            <div class="lf-opt">🌾 Harvester</div>
-                                            <div class="lf-opt">🚁 Drone</div>
-                                            <div class="lf-opt">👷 Labour</div>
-                                        </div>
-                                    </div>
-                                    <div class="lf-field"><label>Your Rate</label>
-                                        <div class="lf-input-row">
-                                            <div class="lf-input">₹ 850</div>
-                                            <div class="lf-rate-toggle"><span class="lf-rate-on">/ Hour</span><span>/
-                                                    Day</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="lf-field"><label>Availability</label>
-                                        <div class="lf-days">
-                                            <div class="lf-day on">Mon</div>
-                                            <div class="lf-day on">Tue</div>
-                                            <div class="lf-day on">Wed</div>
-                                            <div class="lf-day">Thu</div>
-                                            <div class="lf-day on">Fri</div>
-                                            <div class="lf-day">Sat</div>
-                                            <div class="lf-day">Sun</div>
-                                        </div>
-                                    </div>
-                                    <button class="publish-btn"><svg width="14" height="14" viewBox="0 0 24 24"
-                                            fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <polyline points="22 2 15 22 11 13 2 9 22 2" />
-                                        </svg>Publish Listing</button>
-                                </div>
-                            </div>
-                            <div class="sell-section-title">My Active Listings</div>
-                        </div>
-                    </div>
+            <!-- Listing Form -->
+            <div>
+              <div class="lf-card">
+                <div class="lf-title">📋 List New Equipment / Service</div>
+                <div class="lf-field">
+                  <label>Equipment / Service Type</label>
+                  <div class="lf-select-row">
+                    <div class="lf-option lf-option-active">🚜 Tractor</div>
+                    <div class="lf-option">🌾 Harvester</div>
+                    <div class="lf-option">🚁 Drone</div>
+                    <div class="lf-option">👷 Labour</div>
+                  </div>
                 </div>
-
-                <!-- ===== AI PA ===== -->
-                <div class="screen" id="screen-ai">
-                    <div class="ai-header">
-                        <div>
-                            <div class="ai-title"><em>AI Farm PA</em></div>
-                            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Crop Journey Planner
-                            </div>
-                        </div>
-                        <div class="ai-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                            </svg>AI Powered</div>
+                <div class="lf-field">
+                  <label>Your Rate</label>
+                  <div class="lf-input-row">
+                    <div class="lf-input-box">₹ 850</div>
+                    <div class="lf-rate-toggle">
+                      <span class="lf-rate-active">/ Hour</span>
+                      <span>/ Day</span>
                     </div>
-                    <div class="scan-zone">
-                        <div class="scan-grid"></div>
-                        <div class="scan-particles"></div>
-                        <div class="scan-ring"></div>
-                        <div class="scan-ring" style="animation-delay:1s;"></div>
-                        <div class="scan-ring" style="animation-delay:2s;"></div>
-                        <div class="vf-laser-ai"></div>
-                        <div class="scan-content">
-                            <div class="scan-soil">🌍<div class="sc-tl"></div>
-                                <div class="sc-tr"></div>
-                                <div class="sc-bl"></div>
-                                <div class="sc-br"></div>
-                                <div class="scan-laser"></div>
-                            </div>
-                            <div class="scan-text">Analyzing soil composition...</div>
-                            <div class="scan-upload"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                    <polyline points="17 8 12 3 7 8" />
-                                    <line x1="12" y1="3" x2="12" y2="15" />
-                                </svg>Upload Soil Photo</div>
-                        </div>
-                    </div>
-                    <div class="ai-result-card">
-                        <div class="ai-result-header">
-                            <div class="ai-result-icon">🧠</div>
-                            <div>
-                                <div class="ai-result-title">AI Analysis Complete</div>
-                                <div class="ai-result-sub">Scanned 2 mins ago · Field A</div>
-                            </div>
-                        </div>
-                        <div class="chips">
-                            <div class="chip chip-soil">🪨 Loamy Soil</div>
-                            <div class="chip chip-crop">🌿 Cotton Suggested</div>
-                            <div class="chip chip-water">💧 Low Irrigation</div>
-                            <div class="chip chip-conf">96% Confident</div>
-                        </div>
-                    </div>
-                    <div class="journey-timeline">
-                        <div class="journey-tl-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                stroke="var(--green-primary)" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <polyline points="12 6 12 12 16 14" />
-                            </svg>Cotton Crop Journey</div>
-                        <div class="tl-item tl-done">
-                            <div class="tl-left">
-                                <div class="tl-node tl-node-done"><svg width="14" height="14" viewBox="0 0 24 24"
-                                        fill="none" stroke="white" stroke-width="3" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12" />
-                                    </svg></div>
-                                <div class="tl-conn done"></div>
-                            </div>
-                            <div class="tl-right">
-                                <div class="tl-card">
-                                    <div class="tl-card-hd">
-                                        <div class="tl-card-name">🪵 Land Preparation & Plowing</div>
-                                        <div class="tl-card-date">Mar 1–5</div>
-                                    </div>
-                                    <div class="tl-card-desc">Deep plowing to 30cm. Remove weeds and prepare beds for
-                                        sowing.</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tl-item tl-active">
-                            <div class="tl-left">
-                                <div class="tl-node tl-node-active" style="font-size:14px;">🌱</div>
-                                <div class="tl-conn active"></div>
-                            </div>
-                            <div class="tl-right">
-                                <div class="tl-card">
-                                    <div class="tl-card-hd">
-                                        <div class="tl-card-name">🌱 Sowing Cotton Seeds</div>
-                                        <div class="tl-card-date">Mar 10–14 · Today</div>
-                                    </div>
-                                    <div class="tl-card-desc">Plant at 90×45 cm spacing. Ideal soil temp: 20–30°C.
-                                        Watering required post-sow.</div>
-                                    <div class="tl-active-lbl">
-                                        <div
-                                            style="width:5px;height:5px;background:#00C853;border-radius:50%;animation:pulse 1.5s infinite;">
-                                        </div>In Progress
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tl-item tl-todo">
-                            <div class="tl-left">
-                                <div class="tl-node tl-node-todo" style="font-size:14px;">💧</div>
-                                <div class="tl-conn"></div>
-                            </div>
-                            <div class="tl-right">
-                                <div class="tl-card">
-                                    <div class="tl-card-hd">
-                                        <div class="tl-card-name">💧 First Irrigation</div>
-                                        <div class="tl-card-date">Mar 20–22</div>
-                                    </div>
-                                    <div class="tl-card-desc">Light irrigation after germination. Avoid waterlogging.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tl-item tl-todo">
-                            <div class="tl-left">
-                                <div class="tl-node tl-node-todo" style="font-size:14px;">🧪</div>
-                                <div class="tl-conn"></div>
-                            </div>
-                            <div class="tl-right">
-                                <div class="tl-card">
-                                    <div class="tl-card-hd">
-                                        <div class="tl-card-name">🧪 Fertilizer Application</div>
-                                        <div class="tl-card-date">Apr 5–8</div>
-                                    </div>
-                                    <div class="tl-card-desc">Apply DAP + Urea at 25 days post-sowing for vegetative
-                                        growth boost.</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tl-item tl-todo">
-                            <div class="tl-left">
-                                <div class="tl-node tl-node-todo" style="font-size:14px;">🌾</div>
-                            </div>
-                            <div class="tl-right">
-                                <div class="tl-card">
-                                    <div class="tl-card-hd">
-                                        <div class="tl-card-name">🌾 Harvest Season</div>
-                                        <div class="tl-card-date">Sep – Nov</div>
-                                    </div>
-                                    <div class="tl-card-desc">Cotton bolls ready when 60% are open. Multiple pickings
-                                        required.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
                 </div>
-
-                <!-- ===== DIAGNOSE ===== -->
-                <div class="screen" id="screen-diagnose">
-                    <div class="diagnose-wrap">
-                        <div class="vf-area">
-                            <div class="vf-grid"></div>
-                            <div class="vf-topbar">
-                                <div class="vf-back" onclick="switchTab('home')"><svg width="16" height="16"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="15 18 9 12 15 6" />
-                                    </svg></div>
-                                <div class="vf-title-bar">
-                                    <div class="vf-dot"></div>AI Doctor Lens
-                                </div>
-                                <div class="vf-flash"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                                    </svg></div>
-                            </div>
-                            <div
-                                style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-                                <div class="scan-ring"></div>
-                                <div class="scan-ring" style="animation-delay:1s;"></div>
-                                <div class="scan-ring" style="animation-delay:2s;"></div>
-                            </div>
-                            <div class="vf-laser"></div>
-                            <div class="leaf-subject">
-                                <div class="cb cb-tl"></div>
-                                <div class="cb cb-tr"></div>
-                                <div class="cb cb-bl"></div>
-                                <div class="cb cb-br"></div>
-                                <div class="leaf-emoji">🍃</div>
-                            </div>
-                            <div class="vf-hint-wrap">
-                                <div class="vf-hint"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <line x1="12" y1="8" x2="12" y2="12" />
-                                        <line x1="12" y1="16" x2="12.01" y2="16" />
-                                    </svg>Place infected leaf inside the brackets</div>
-                            </div>
-                        </div>
-                        <div class="diag-sheet">
-                            <div class="sheet-handle"></div>
-                            <div class="disease-alert">
-                                <div class="disease-icon-wrap">🦠</div>
-                                <div>
-                                    <div class="disease-name">Leaf Blight Detected</div>
-                                    <div class="disease-sev">
-                                        <div class="sev-dot"></div>High Severity · Wheat Crop
-                                    </div>
-                                </div>
-                                <div
-                                    style="margin-left:auto;background:#FFEBEE;border-radius:8px;padding:6px 10px;text-align:center;">
-                                    <div
-                                        style="font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:var(--warning);">
-                                        87%</div>
-                                    <div style="font-size:9px;color:#C62828;">Match</div>
-                                </div>
-                            </div>
-                            <div class="sheet-section">About the Disease</div>
-                            <div class="disease-about">Wheat Leaf Blight (Alternaria triticina) causes water-soaked
-                                lesions that turn yellow-brown. It spreads rapidly under humid conditions (&gt;70% RH)
-                                and can reduce yield by <strong>30–45%</strong> if left untreated. Early intervention is
-                                critical.</div>
-                            <div class="sheet-section">Treatment Plan</div>
-                            <div class="treatment-list">
-                                <div class="treatment-item">
-                                    <div class="t-num">1</div>
-                                    <div class="t-text"><strong>Remove</strong> and destroy infected leaves to prevent
-                                        spore spread. Do not compost.</div>
-                                </div>
-                                <div class="treatment-item">
-                                    <div class="t-num">2</div>
-                                    <div class="t-text"><strong>Apply</strong> Mancozeb 75WP @ 2g/litre water as foliar
-                                        spray. Repeat every 7 days.</div>
-                                </div>
-                                <div class="treatment-item">
-                                    <div class="t-num">3</div>
-                                    <div class="t-text"><strong>Reduce</strong> irrigation frequency. Avoid overhead
-                                        watering during evening hours.</div>
-                                </div>
-                            </div>
-                            <button class="order-btn">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white"
-                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                                    <line x1="3" y1="6" x2="21" y2="6" />
-                                    <path d="M16 10a4 4 0 0 1-8 0" />
-                                </svg>
-                                Order Mancozeb 75WP Now
-                            </button>
-                        </div>
-                    </div>
+                <div class="lf-field">
+                  <label>Availability</label>
+                  <div class="lf-avail-row">
+                    <div class="lf-avail-chip lf-avail-on">Mon</div>
+                    <div class="lf-avail-chip lf-avail-on">Tue</div>
+                    <div class="lf-avail-chip lf-avail-on">Wed</div>
+                    <div class="lf-avail-chip">Thu</div>
+                    <div class="lf-avail-chip lf-avail-on">Fri</div>
+                    <div class="lf-avail-chip">Sat</div>
+                    <div class="lf-avail-chip">Sun</div>
+                  </div>
                 </div>
+                <button class="publish-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  Publish Listing
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            </div><!-- end screens-wrapper -->
+      <!-- ==================== FARMGURU PAGE ==================== -->
+      <div class="page" id="page-ai">
+        <div class="ai-page-header">
+          <div>
+            <div class="ai-page-title"><span>FarmGuru</span></div>
+            <div style="font-size:12.5px;color:var(--muted);margin-top:3px;">Crop Journey Planner · Powered by Gravitoo AI</div>
+          </div>
+          <div class="ai-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            AI Powered
+          </div>
+        </div>
 
-            <!-- BOTTOM NAV (mobile) -->
-            <nav class="bottom-nav">
-                <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
-                    <div class="nav-pill"></div>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                        <polyline points="9 22 9 12 15 12 15 22" />
-                    </svg>
-                    <span>Home</span>
-                </div>
-                <div class="nav-item" id="nav-rentals" onclick="switchTab('rentals')">
-                    <div class="nav-pill"></div>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="1" y="3" width="15" height="13" />
-                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-                        <circle cx="5.5" cy="18.5" r="2.5" />
-                        <circle cx="18.5" cy="18.5" r="2.5" />
-                    </svg>
-                    <span>Rentals</span>
-                </div>
-                <div class="nav-item" id="nav-ai" onclick="switchTab('ai')">
-                    <div class="nav-ai-btn" id="ai-nav-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                        </svg>
-                    </div>
-                    <span style="margin-top:2px;">AI PA</span>
-                </div>
-                <div class="nav-item" id="nav-notif" onclick="switchTab('notif')">
-                    <div class="nav-pill"></div>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                    </svg>
-                    <span>Alerts</span>
-                </div>
-                <div class="nav-item" id="nav-diagnose" onclick="switchTab('diagnose')">
-                    <div class="nav-pill"></div>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    </svg>
-                    <span>Diagnose</span>
-                </div>
-            </nav>
-        </div><!-- end main -->
-    </div><!-- end app-layout -->
+        <div>
+          <!-- Option Bar -->
+          <div class="ongoing-journeys-bar">
+            <div class="journey-tab new-journey-tab active">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Plan New Journey
+            </div>
+          </div>
 
-    <script>
-        const screens = { home: 'screen-home', rentals: 'screen-rentals', ai: 'screen-ai', notif: 'screen-home', diagnose: 'screen-diagnose' };
-        const navIds = { home: 'nav-home', rentals: 'nav-rentals', ai: 'nav-ai', notif: 'nav-notif', diagnose: 'nav-diagnose' };
-        const sbIds = { home: 'sb-home', rentals: 'sb-rentals', ai: 'sb-ai', diagnose: 'sb-diagnose' };
-        let current = 'home';
+          <!-- Journey Tracker -->
+          <div class="card" id="farmguru-planner-container">
+            <div class="empty-state">
+              <div class="empty-state-icon">📸</div>
+              <div class="empty-state-title">Scan Soil to Begin</div>
+              <div class="empty-state-text">Upload a picture of your soil and enter your land area. Our AI will analyze the soil type based on your geographical location and suggest the best crops to plant.</div>
+              <button class="publish-btn" style="max-width: 200px; margin-top: 20px;">
+                Upload Soil Photo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        function switchTab(tab) {
-            if (tab === 'notif') tab = 'home';
-            if (tab === current) return;
-            const oldEl = document.getElementById(screens[current]);
-            const newEl = document.getElementById(screens[tab]);
-            oldEl.classList.remove('active'); oldEl.classList.add('exit');
-            setTimeout(() => oldEl.classList.remove('exit'), 350);
-            newEl.classList.add('active'); newEl.scrollTop = 0;
+      <!-- ==================== DIAGNOSE PAGE ==================== -->
+      <div class="page" id="page-diagnose">
+        <div class="page-header">
+          <div>
+            <div class="page-header-title">AI Crop <span style="color:var(--warn);">Diagnose</span></div>
+            <div style="font-size:12.5px;color:var(--muted);margin-top:3px;">Doctor Lens — Upload or scan a leaf for instant disease detection</div>
+          </div>
+          <div class="ai-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            AI Powered
+          </div>
+        </div>
 
-            // bottom nav
-            const prevNav = document.getElementById(navIds[current]);
-            if (prevNav) prevNav.classList.remove('active');
-            const nextNav = document.getElementById(navIds[tab]);
-            if (nextNav) nextNav.classList.add('active');
-            document.getElementById('ai-nav-btn').classList.toggle('active', tab === 'ai');
+        <div class="diagnose-grid">
+          <!-- Viewfinder -->
+          <div class="diagnose-viewfinder">
+            <div class="vf-bg"></div>
+            <div class="vf-top-bar">
+              <div class="vf-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </div>
+              <div class="vf-title"><div class="vf-title-dot"></div>AI Doctor Lens</div>
+              <div class="vf-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+            </div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+              <div class="scan-ring"></div>
+              <div class="scan-ring" style="animation-delay:1s;"></div>
+              <div class="scan-ring" style="animation-delay:2s;"></div>
+            </div>
+            <div class="vf-scan-laser"></div>
+            <div class="leaf-subject">
+              <div class="corner-bracket cb-tl"></div>
+              <div class="corner-bracket cb-tr"></div>
+              <div class="corner-bracket cb-bl"></div>
+              <div class="corner-bracket cb-br"></div>
+              <div class="leaf-emoji">🍃</div>
+            </div>
+            <div class="vf-hint">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Place infected leaf inside the brackets
+            </div>
+          </div>
 
-            // sidebar
-            ['sb-home', 'sb-rentals', 'sb-ai', 'sb-diagnose'].forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
-            if (sbIds[tab]) { const sbEl = document.getElementById(sbIds[tab]); if (sbEl) sbEl.classList.add('active'); }
-            current = tab;
-        }
+          <!-- Results Panel -->
+          <div class="card" style="align-self:start;">
+            <div class="card-title" style="color:var(--warn);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Diagnosis Results
+            </div>
 
-        function setRentalTab(mode) {
-            const hire = mode === 'hire';
-            document.getElementById('tab-hire').classList.toggle('active', hire);
-            document.getElementById('tab-sell').classList.toggle('active', !hire);
-            document.getElementById('hire-panel').style.display = hire ? 'block' : 'none';
-            document.getElementById('sell-panel').style.display = hire ? 'none' : 'block';
-            document.getElementById('hire-context').style.display = hire ? 'flex' : 'none';
-            document.getElementById('sell-context').style.display = hire ? 'none' : 'flex';
-        }
+          <div id="diagnose-results-container">
+            <div style="margin-top: 16px;">
+              <div style="font-weight: 600; font-size: 16px; margin-bottom: 8px;">Wheat Rust Detected</div>
+              <div style="font-size: 13px; color: var(--muted); margin-bottom: 12px; line-height: 1.5;">High probability (92%) of Stem Rust. Immediate action recommended to prevent further spread across the field.</div>
+              <div style="background: #fff4f4; border: 1px solid #ffdcdc; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                <div style="font-weight: 600; color: #d32f2f; margin-bottom: 4px; font-size: 13px;">Recommended Treatment:</div>
+                <div style="font-size: 13px; color: #d32f2f; line-height: 1.5;">Apply a fungicide containing Tebuconazole or Propiconazole within the next 24 hours. Ensure complete foliage coverage.</div>
+              </div>
+              <button class="publish-btn" style="width: 100%;">Order Treatment Chemicals</button>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
 
-        function toggleListingForm() {
-            const f = document.getElementById('listing-form');
-            f.style.display = f.style.display === 'none' ? 'block' : 'none';
-        }
-    </script>
+      <!-- ==================== NOTIFICATIONS PAGE ==================== -->
+      <div class="page" id="page-notif">
+        <div class="page-header">
+          <div class="page-header-title">Notifications <span>(3 Unread)</span></div>
+          <button class="notif-action-btn">Mark all as read</button>
+        </div>
+
+        <div class="notif-list">
+          <div style="background: white; border: 1px solid #eee; padding: 16px; border-radius: 12px; margin-bottom: 12px; display: flex; gap: 16px; align-items: flex-start;">
+            <div style="font-size: 24px; background: #fff4f4; padding: 12px; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">🌦️</div>
+            <div>
+              <div style="font-weight: 600; margin-bottom: 4px; font-size: 15px;">Heavy Rain Alert</div>
+              <div style="font-size: 13px; color: var(--muted); line-height: 1.5;">Expected heavy rainfall in your district within the next 48 hours. Consider delaying your pesticide spray on the North Field.</div>
+            </div>
+          </div>
+          <div style="background: white; border: 1px solid #eee; padding: 16px; border-radius: 12px; margin-bottom: 12px; display: flex; gap: 16px; align-items: flex-start;">
+            <div style="font-size: 24px; background: #f0fff4; padding: 12px; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">🚜</div>
+            <div>
+              <div style="font-weight: 600; margin-bottom: 4px; font-size: 15px;">Rental Booking Confirmed</div>
+              <div style="font-size: 13px; color: var(--muted); line-height: 1.5;">Your Mahindra 575 DI has been booked for tomorrow (8:00 AM - 4:00 PM) by Amit Singh.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== CART / MY ORDERS PAGE ==================== -->
+      <div class="page" id="page-cart">
+        <div class="page-header">
+          <div class="page-header-title">My <span>Orders</span></div>
+        </div>
+
+        <div class="sell-grid" style="margin-top: 20px;">
+          <div class="my-listing-card" style="background: white; border: 1px solid #eee;">
+            <div class="my-listing-img" style="background: #fff8e1; font-size: 28px;">👷</div>
+            <div class="my-listing-info">
+              <div class="my-listing-name" style="font-weight: 600;">Field Labour (2 workers)</div>
+              <div class="my-listing-rate" style="color: var(--green); font-weight: 500; font-size: 14px;">₹600 / day each</div>
+              <div class="my-listing-stats" style="color:var(--muted); font-size:12px; margin-top:4px;">Scheduled for: Tomorrow, 9:00 AM</div>
+            </div>
+            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end;">
+              <div style="font-weight: 600; font-size: 16px; color: var(--text-main);">₹1,200</div>
+              <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Total Due</div>
+              <button style="background: #fff0f0; border: none; color: #d32f2f; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;">Cancel Order</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav" id="mobile-bottom-nav" style="display: none;">
+  <div class="mbn-item active" id="mbn-home" onclick="switchPage('home')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </div>
+  <div class="mbn-item" id="mbn-rentals" onclick="switchPage('rentals')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    <span>Rentals</span>
+  </div>
+  <div class="mbn-item" id="mbn-ai" onclick="switchPage('ai')">
+    <div class="mbn-ai-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    </div>
+    <span>FarmGuru</span>
+  </div>
+  <div class="mbn-item" id="mbn-notif" onclick="switchPage('notif')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <span>Alerts</span>
+  </div>
+  <div class="mbn-item" id="mbn-diagnose" onclick="switchPage('diagnose')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <span>Diagnose</span>
+  </div>
+</nav>
+
+<script src="script.js"></script>
 </body>
-
 </html>
